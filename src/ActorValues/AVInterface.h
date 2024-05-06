@@ -1,8 +1,12 @@
 #pragma once
+#include <functional>
+#include <queue>
+#include <stdint.h>
 
 class AVInterface
 {
 public:
+    virtual void  DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage) noexcept = 0;
 	virtual float GetBaseActorValue(RE::Actor* a_actor) = 0;
 	float         GetBaseAV(RE::Actor* a_actor)
 	{

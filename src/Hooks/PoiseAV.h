@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ActorValues/AVInterface.h"
-
 #include "FormUtil.h"
 
 //static float* g_deltaTime = (float*)RELOCATION_ID(523660, 410199).address();          // 2F6B948, 30064C8
@@ -9,9 +8,11 @@
 
 static float& g_deltaTime = (*(float*)RELOCATION_ID(523660, 410199).address());
 
-class PoiseAV : public AVInterface
+class PoiseAV : public AVInterface  
 {
 public:
+    
+
 	static void InstallHooks()
 	{
 		Hooks::Install();
@@ -28,7 +29,7 @@ public:
 	bool  CanDamageActor(RE::Actor* a_actor);
 	float GetBaseActorValue(RE::Actor* a_actor);
 	float GetActorValueMax(RE::Actor* a_actor);
-	void  DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage);
+	virtual void DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage) noexcept override;
 	void  Update(RE::Actor* a_actor, float a_delta);
 	void  GarbageCollection();
 

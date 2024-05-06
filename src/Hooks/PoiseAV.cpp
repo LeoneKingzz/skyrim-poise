@@ -53,7 +53,7 @@ float PoiseAV::GetActorValueMax([[maybe_unused]] RE::Actor* a_actor)
 	return GetBaseActorValue(a_actor);
 }
 
-void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage)
+void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage) noexcept
 {
 	auto                               settings = Settings::GetSingleton();
 	auto                               avManager = AVManager::GetSingleton();
