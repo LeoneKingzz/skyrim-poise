@@ -59,8 +59,8 @@ void EldenParry::update() {
 			it = _parryTimer.erase(it);
 			continue;
 		}
-		static float* g_deltaTime = (float*)RELOCATION_ID(523660, 410199).address();          // 2F6B948
-		it->second += *g_deltaTime;
+		//*static float* g_deltaTime = (float*)RELOCATION_ID(523660, 410199).address();*/          // 2F6B948
+		it->second += g_deltaTime;
 		it++;
 	}
 }
