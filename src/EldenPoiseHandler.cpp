@@ -29,7 +29,7 @@ protected:
 
 		if (eventName == "EP_RipostePoiseEvent") {
 			auto poiseAV = PoiseAV::GetSingleton();
-			poiseAV->DamageAndCheckPoise(attacker, nullptr, EPpoiseDamage);
+			poiseAV->DmgAndChckPoise(attacker, nullptr, EPpoiseDamage);
 		}
 
 		return EventResult::kContinue;
