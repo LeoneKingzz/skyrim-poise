@@ -171,9 +171,19 @@ public:
 		auto bHasDragonsTail = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck60_DragonTail_Perk_60_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasDeliverance = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck90_Deliverance_Perk_90_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bDefenderHasShield = isEquippedShield(a_defender);
-		
-		
 
+		if (bHasEldenParryPerk2 == true || bHasEldenParryPerk1 == true) {
+			RE::MagicItem *eldenArmorSpell = nullptr;
+			if (bHasEldenParryPerk2 == true) {
+				eldenArmorSpell = RE::TESForm::LookupByEditorID<RE::MagicItem>("ORD_Bck_TimedBlock_Spell_Proc_2");
+			} else if (bHasEldenParryPerk1) {
+				eldenArmorSpell = RE::TESForm::LookupByEditorID<RE::MagicItem>("ORD_Bck_TimedBlock_Spell_Proc");
+			}
+			const auto caster = a_defender->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+			caster->CastSpellImmediate(eldenArmorSpell, true, a_defender, 1, false, 45, a_defender);
+		}
+		
+		
 		if (bDefenderHasShield == true) {
 			if (bHasEldenParryPerk2 == true)
 			{
