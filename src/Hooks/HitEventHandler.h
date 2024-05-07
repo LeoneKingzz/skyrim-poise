@@ -18,6 +18,7 @@ public:
 	float GetUnarmedDamage(RE::Actor* a_actor);
 	float GetShieldDamage(RE::TESObjectARMO* a_shield);
 	float GetMiscDamage();
+	float ModActorBashMult(RE::Actor* aggressor);
 
 	float RecalculateStagger(RE::Actor* target, RE::Actor* aggressor, RE::HitData* hitData);
 
