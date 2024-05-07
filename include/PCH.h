@@ -30,6 +30,11 @@
 
 #pragma warning(pop)
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+#include <SimpleIni.h>
+
 using namespace std::literals;
 
 namespace stl
