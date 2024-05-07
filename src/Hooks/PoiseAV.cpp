@@ -83,7 +83,6 @@ void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, f
 
 void PoiseAV::DmgAndChckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage)
 {
-	auto                               settings = Settings::GetSingleton();
 	auto                               avManager = AVManager::GetSingleton();
 	std::lock_guard<std::shared_mutex> lk(avManager->mtx);
 
