@@ -527,14 +527,14 @@ public:
 		}
 		const char* modelName;
 		if (BipeObjIndex == RE::BIPED_OBJECT::kShield && defenderLeftEquipped && defenderLeftEquipped->IsArmor()) {
-			if (Settings::facts::isValhallaCombatAPIObtained) {
+			if (EldenSettings::facts::isValhallaCombatAPIObtained) {
 				modelName = "ValhallaCombat\\impactShieldRoot.nif";
 			} else {
 				modelName = "EldenParry\\impactShieldRoot.nif";
 			}
 			
 		} else {
-			if (Settings::facts::isValhallaCombatAPIObtained) {
+			if (EldenSettings::facts::isValhallaCombatAPIObtained) {
 				modelName = "ValhallaCombat\\impactWeaponRoot.nif";
 			} else {
 				modelName = "EldenParry\\impactWeaponRoot.nif";
