@@ -185,7 +185,7 @@ public:
 				else if (a_reprisal < 20.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true) {
+					if (bHasDragonsTail == true && a_reprisal != 0.0f) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
@@ -204,7 +204,7 @@ public:
 				else if (a_reprisal < 15.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true) {
+					if (bHasDragonsTail == true && a_reprisal != 0.0f) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
@@ -223,7 +223,7 @@ public:
 				else if (a_reprisal < 10.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true) {
+					if (bHasDragonsTail == true && a_reprisal != 0.0f) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
@@ -243,7 +243,7 @@ public:
 				else if (a_reprisal < 10.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true) {
+					if (bHasDragonsTail == true && a_reprisal != 0.0f) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
@@ -254,6 +254,9 @@ public:
 				if (a_reprisal >= 25.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+					if (bHasDragonsTail == true) {
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal >= 5.0f && a_reprisal < 25.0f)
@@ -276,11 +279,17 @@ public:
 				if (a_reprisal >= 20.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+					if (bHasDragonsTail == true) {
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal >= 10.0f && a_reprisal < 20.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
+					if (bHasDragonsTail == true) {
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal >= 0.0f && a_reprisal < 10.0f)
