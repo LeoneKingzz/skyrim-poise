@@ -175,17 +175,17 @@ public:
 			{
 				if (a_reprisal >= 20.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 25.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
 				else if (a_reprisal < 20.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 50.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
@@ -194,17 +194,17 @@ public:
 			{
 				if (a_reprisal >= 15.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 25.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
 				else if (a_reprisal < 15.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 50.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
@@ -213,17 +213,17 @@ public:
 			{
 				if (a_reprisal >= 10.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 25.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
 				else if (a_reprisal < 10.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 50.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
@@ -233,17 +233,17 @@ public:
 			{
 				if (a_reprisal >= 10.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 25.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
 				else if (a_reprisal < 10.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 50.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
@@ -252,24 +252,21 @@ public:
 			{
 				if (a_reprisal >= 25.0f)
 				{
-					a_defender->NotifyAnimationGraph(recoilStart);
-					a_aggressor->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					return;
 				}
 				else if (a_reprisal >= 5.0f && a_reprisal < 25.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 25.0f);	
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
 					return;
 				}
 				else if (a_reprisal < 5.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
-					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 50.0f);	
-					}
+					a_defender->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilStart);
 					return;
 				}
 			}
@@ -277,30 +274,24 @@ public:
 			{
 				if (a_reprisal >= 20.0f)
 				{
-					a_defender->NotifyAnimationGraph(recoilLargeStart);
-					a_aggressor->NotifyAnimationGraph(recoilStart);
+					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					return;
 				}
 				else if (a_reprisal >= 10.0f && a_reprisal < 20.0f)
 				{
-					a_defender->NotifyAnimationGraph(recoilStart);
 					a_aggressor->NotifyAnimationGraph(recoilStart);
 					return;
 				}
 				else if (a_reprisal >= 0.0f && a_reprisal < 10.0f)
 				{
+					a_defender->NotifyAnimationGraph(recoilStart);
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 25.0f);	
-					}
 					return;
 				}
 				else if (a_reprisal < 0.0f)
 				{
-					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
-					if (bHasDragonsTail == true) {
-						EldenParry::GetSingleton()->send_riposte_parry_event(a_aggressor, 50.0f);	
-					}
+					a_defender->NotifyAnimationGraph(recoilLargeStart);
+					a_aggressor->NotifyAnimationGraph(recoilStart);
 					return;
 				}
 			}

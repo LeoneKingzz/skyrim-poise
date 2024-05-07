@@ -478,7 +478,7 @@ float EldenParry::AttackerBeatsParry(RE::Actor *attacker, RE::Actor *target)
 	const float attackerScore = GetScore(attacker, Milf::GetSingleton()->scores);
 	const float targetScore = GetScore(target, Milf::GetSingleton()->scores);
 
-	return (((attackerScore - targetScore)/attackerScore)*100.0f); // >= Milf::GetSingleton()->scores.scoreDiffThreshold);
+	return (((targetScore - attackerScore)/targetScore)*100.0f); // >= Milf::GetSingleton()->scores.scoreDiffThreshold);
 }
 
 
