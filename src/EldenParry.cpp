@@ -65,6 +65,19 @@ void EldenParry::update() {
 	}
 }
 
+float EldenParry::calculateRiposteReflex(RE::Actor *a_actor) {
+	auto bHasQuickReflexes = a_actor->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck40_QuickReflexes_Perk_40_QuickReflexes")->As<RE::BGSPerk>());
+	auto bDefenderHasShield = Utils::isEquippedShield(a_actor);
+	float a_value = 0.0f;
+	if (bDefenderHasShield == false) {
+		a_value += 0.1f;
+	}
+	if (bHasQuickReflexes == false) {
+		a_value += 0.1f;
+	}
+	return a_value;
+}
+
 void EldenParry::startTimingParry(RE::Actor* a_actor) {
 
 	uniqueLocker lock(mtx_parryTimer);
@@ -72,7 +85,7 @@ void EldenParry::startTimingParry(RE::Actor* a_actor) {
 	if (it != _parryTimer.end()) {
 		it->second = 0;
 	} else {
-		_parryTimer.insert({a_actor, 0.0f});
+		_parryTimer.insert({a_actor, calculateRiposteReflex(a_actor)});
 	}
 	
 	_bUpdate = true;

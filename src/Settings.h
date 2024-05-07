@@ -14,7 +14,7 @@ public:
 		static inline bool isValhallaCombatAPIObtained = false;
 	};
 	static inline float fParryWindow_Start = 0.0f;
-	static inline float fParryWindow_End = 0.3f;
+	static inline float fParryWindow_End = 0.4f;
 
 	static inline bool bEnableWeaponParry = true;
 	static inline bool bEnableShieldParry = true;
