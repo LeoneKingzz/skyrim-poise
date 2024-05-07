@@ -162,7 +162,6 @@ public:
 
 	void send_melee_parry_event(RE::Actor *a_attacker);
 	void send_ranged_parry_event();
-	void send_riposte_parry_event(RE::Actor* a_attacker, float a_poisedamage);
 
 	void update();
 

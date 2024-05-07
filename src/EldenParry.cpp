@@ -262,18 +262,6 @@ void EldenParry::send_melee_parry_event(RE::Actor* a_attacker) {
 	logger::info("Sent melee parry event");
 }
 
-void EldenParry::send_riposte_parry_event(RE::Actor* a_attacker, float a_poisedamage) {
-	SKSE::ModCallbackEvent modEvent{
-				RE::BSFixedString("EP_RipostePoiseEvent"),
-				RE::BSFixedString(),
-				a_poisedamage,
-				a_attacker
-	};
-
-	SKSE::GetModCallbackEventSource()->SendEvent(&modEvent);
-	logger::info("Sent riposte parry event");
-}
-
 
 void EldenParry::send_ranged_parry_event() {
 	SKSE::ModCallbackEvent modEvent{
