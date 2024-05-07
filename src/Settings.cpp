@@ -1,6 +1,6 @@
 #include "Settings.h"
 
-void Settings::readSettings() {
+void EldenSettings::readSettings() {
 	logger::info("Reading settings...");
 	CSimpleIniA settings;
 	readSimpleIni(settings, settingsDir);

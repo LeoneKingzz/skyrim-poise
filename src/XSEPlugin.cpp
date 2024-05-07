@@ -6,6 +6,12 @@
 #include "Storage/Serialization.h"
 #include "Storage/Settings.h"
 #include "UI/PoiseAVHUD.h"
+#include "Settings.h"
+#include "Hooks.h"
+#include "EldenParry.h"
+#include "AnimEventHandler.h"
+#include "Utils.hpp"
+
 
 static void MessageHandler(SKSE::MessagingInterface::Message* message)
 {
@@ -16,6 +22,8 @@ static void MessageHandler(SKSE::MessagingInterface::Message* message)
 			poiseAV->RetrieveFullBodyStaggerFaction();
 			auto settings = Settings::GetSingleton();
 			settings->LoadSettings();
+			EldenParry::GetSingleton()->init();
+		    animEventHandler::Register(true, EldenSettings::bEnableNPCParry);
 			break;
 		}
 	case SKSE::MessagingInterface::kPostLoad:
@@ -66,6 +74,8 @@ void Init()
 	Hooks::Install();
 	Events::Register();
 	ActorCache::RegisterEvents();
+	EldenSettings::readSettings();
+	EldenHooks::install();
 }
 
 void InitializeLog()

@@ -3,7 +3,7 @@
 #include "EldenParry.h"
 #include "Settings.h"
 #include "Utils.hpp"
-namespace Hooks
+namespace EldenHooks
 {
 	class Hook_getAttackStaminaCost  //Actor__sub_140627930+16E	call ActorValueOwner__sub_1403BEC90
 	{
@@ -47,23 +47,23 @@ namespace Hooks
 			if (a_aggressor->AsActorState()->GetAttackState() == RE::ATTACK_STATE_ENUM::kBash) {
 				bool isAggressorShieldEquipped = Utils::isEquippedShield(a_aggressor);
 				if (!inlineUtils::isPowerAttacking(a_aggressor)) {
-					if (a_aggressor->IsPlayerRef() || Settings::bEnableNPCParry) {
-						if ((isAggressorShieldEquipped && Settings::bEnableShieldParry) || Settings::bEnableWeaponParry) {
+					if (a_aggressor->IsPlayerRef() || EldenSettings::bEnableNPCParry) {
+						if ((isAggressorShieldEquipped && EldenSettings::bEnableShieldParry) || EldenSettings::bEnableWeaponParry) {
 							return true;
 						} 
 					}
 				} else {//is power bash
-					if (a_aggressor->IsPlayerRef() || Settings::bEnableNPCParry) {
-						if ((isAggressorShieldEquipped && Settings::bEnableShieldGuardBash) || Settings::bEnableWeaponGuardBash) {
+					if (a_aggressor->IsPlayerRef() || EldenSettings::bEnableNPCParry) {
+						if ((isAggressorShieldEquipped && EldenSettings::bEnableShieldGuardBash) || EldenSettings::bEnableWeaponGuardBash) {
 							EldenParry::GetSingleton()->processGuardBash(a_aggressor, a_victim);
 						} 
 					}
 				}
 				
 			} else if (a_victim->AsActorState()->GetAttackState() == RE::ATTACK_STATE_ENUM::kBash) {
-				if (a_victim->IsPlayerRef() || Settings::bEnableNPCParry) {
+				if (a_victim->IsPlayerRef() || EldenSettings::bEnableNPCParry) {
 					bool isDefenderShieldEquipped = Utils::isEquippedShield(a_victim);
-					if ((isDefenderShieldEquipped && Settings::bEnableShieldParry) || Settings::bEnableWeaponParry) {
+					if ((isDefenderShieldEquipped && EldenSettings::bEnableShieldParry) || EldenSettings::bEnableWeaponParry) {
 						return EldenParry::GetSingleton()->processMeleeParry(a_aggressor, a_victim);
 					}
 				}
@@ -128,15 +128,15 @@ namespace Hooks
 					auto refrA = RE::TESHavokUtilities::FindCollidableRef(*hit.rootCollidableA);
 					auto refrB = RE::TESHavokUtilities::FindCollidableRef(*hit.rootCollidableB);
 					if (refrA && refrA->formType == RE::FormType::ActorCharacter && refrA->As<RE::Actor>()->AsActorState()->GetAttackState() == RE::ATTACK_STATE_ENUM::kBash) {
-						if (refrA->IsPlayerRef() || Settings::bEnableNPCParry) {
-							if ((a_projectile->GetProjectileRuntimeData().spell && Settings::bEnableMagicProjectileDeflection) || Settings::bEnableArrowProjectileDeflection) {
+						if (refrA->IsPlayerRef() || EldenSettings::bEnableNPCParry) {
+							if ((a_projectile->GetProjectileRuntimeData().spell && EldenSettings::bEnableMagicProjectileDeflection) || EldenSettings::bEnableArrowProjectileDeflection) {
 								return EldenParry::GetSingleton()->processProjectileParry(refrA->As<RE::Actor>(), a_projectile, const_cast<RE::hkpCollidable*>(hit.rootCollidableB));
 							}
 						}
 					}
 					if (refrB && refrB->formType == RE::FormType::ActorCharacter && refrB->As<RE::Actor>()->AsActorState()->GetAttackState() == RE::ATTACK_STATE_ENUM::kBash) {
-						if (refrB->IsPlayerRef() || Settings::bEnableNPCParry) {
-							if ((a_projectile->GetProjectileRuntimeData().spell && Settings::bEnableMagicProjectileDeflection) || Settings::bEnableArrowProjectileDeflection) {
+						if (refrB->IsPlayerRef() || EldenSettings::bEnableNPCParry) {
+							if ((a_projectile->GetProjectileRuntimeData().spell && EldenSettings::bEnableMagicProjectileDeflection) || EldenSettings::bEnableArrowProjectileDeflection) {
 								return EldenParry::GetSingleton()->processProjectileParry(refrB->As<RE::Actor>(), a_projectile, const_cast<RE::hkpCollidable*>(hit.rootCollidableA));
 							}
 						}
@@ -190,7 +190,7 @@ namespace Hooks
 	{
 		//SKSE::AllocTrampoline(1 << 4);
 		SKSE::AllocTrampoline(1 << 5);
-		if (Settings::bSuccessfulParryNoCost) {
+		if (EldenSettings::bSuccessfulParryNoCost) {
 			Hook_getAttackStaminaCost::install();
 		}
 		PlayerUpdate::install();

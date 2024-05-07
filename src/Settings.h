@@ -4,7 +4,7 @@
 using std::string;
 
 static const char* settingsDir = "Data\\SKSE\\Plugins\\EldenParry.ini";
-class Settings
+class EldenSettings
 {
 public:
 	class facts

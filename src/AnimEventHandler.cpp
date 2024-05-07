@@ -33,7 +33,7 @@ RE::BSEventNotifyControl animEventHandler::HookedProcessEvent(RE::BSAnimationGra
 		break;
 	case "bashStop"_h:
 		auto EP = EldenParry::GetSingleton();
-		if (Settings::bSuccessfulParryNoCost) {
+		if (EldenSettings::bSuccessfulParryNoCost) {
 			EP->applyParryCost((RE::Actor*)a_event.holder);
 		}
 		EP->finishTimingParry((RE::Actor*)a_event.holder);
