@@ -53,7 +53,7 @@ float PoiseAV::GetActorValueMax([[maybe_unused]] RE::Actor* a_actor)
 	return GetBaseActorValue(a_actor);
 }
 
-void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage) noexcept
+void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage)
 {
 	auto                               settings = Settings::GetSingleton();
 	auto                               avManager = AVManager::GetSingleton();
@@ -79,6 +79,24 @@ void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, f
 		TryStagger(a_target, poiseDamagePercent, a_aggressor);
 	}
 	logger::debug(FMT_STRING("Target {} Poise Damage {} Poise Health {} / {}"), a_target->GetName(), a_poiseDamage, avManager->GetActorValue(g_avName, a_target), avManager->GetActorValueMax(g_avName, a_target));
+}
+
+void PoiseAV::DmgAndChckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage)
+{
+	auto                               settings = Settings::GetSingleton();
+	auto                               avManager = AVManager::GetSingleton();
+	std::lock_guard<std::shared_mutex> lk(avManager->mtx);
+
+
+	avManager->DamageActorValue(g_avName, a_target, a_poiseDamage);
+	auto poise = avManager->GetActorValue(g_avName, a_target);
+	if (poise == 0.0f) {
+		a_target->AddToFaction(ForceFullBodyStagger, 0);
+		auto poiseDamagePercent = a_poiseDamage / avManager->GetActorValueMax(g_avName, a_target);
+		// Stagger duration is relative to the power of the attacking weapon
+		logger::debug(FMT_STRING("Poise Damage Percent {}"), poiseDamagePercent);
+		TryStagger(a_target, poiseDamagePercent, a_aggressor);
+	}
 }
 
 void PoiseAV::Update(RE::Actor* a_actor, [[maybe_unused]] float a_delta)
