@@ -1,5 +1,6 @@
 #pragma once
 #include "Hooks/PoiseAV.h"
+#include "ActorValues/AVManager.h"
 
 
 class Utils
@@ -168,7 +169,9 @@ public:
 		auto bHasEldenParryPerk2 = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck20_TimedBlock_Perk_50_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasEldenParryPerk1 = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck20_TimedBlock_Perk_20_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasDragonsTail = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck60_DragonTail_Perk_60_OrdASISExclude")->As<RE::BGSPerk>());
+		auto bHasDeliverance = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck90_Deliverance_Perk_90_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bDefenderHasShield = isEquippedShield(a_defender);
+		
 		
 
 		if (bDefenderHasShield == true) {
@@ -180,13 +183,21 @@ public:
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal < 20.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true && a_reprisal <= 0.0f) {
-						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					if (!(a_reprisal <= 0.0f)) {
+						if (bHasDragonsTail == true) {
+							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);
+						}
+						if (bHasDeliverance == true) {
+							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);
+						}
 					}
 					return;
 				}
@@ -199,13 +210,21 @@ public:
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal < 15.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true && a_reprisal <= 0.0f) {
-						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					if (!(a_reprisal <= 0.0f)) {
+						if (bHasDragonsTail == true) {
+							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);
+						}
+						if (bHasDeliverance == true) {
+							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);
+						}
 					}
 					return;
 				}
@@ -218,13 +237,21 @@ public:
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal < 10.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true && a_reprisal <= 0.0f) {
-						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					if (!(a_reprisal <= 0.0f)) {
+						if (bHasDragonsTail == true) {
+							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);
+						}
+						if (bHasDeliverance == true) {
+							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);
+						}
 					}
 					return;
 				}
@@ -238,13 +265,21 @@ public:
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal < 10.0f)
 				{
 					a_aggressor->NotifyAnimationGraph(recoilStart);
-					if (bHasDragonsTail == true && a_reprisal <= 0.0f) {
-						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					if (!(a_reprisal <= 0.0f)) {
+						if (bHasDragonsTail == true) {
+							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);
+						}
+						if (bHasDeliverance == true) {
+							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);
+						}
 					}
 					return;
 				}
@@ -257,6 +292,9 @@ public:
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal >= 5.0f && a_reprisal < 25.0f)
@@ -264,6 +302,9 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
 					}
 					return;
 				}
@@ -282,6 +323,9 @@ public:
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
 					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
+					}
 					return;
 				}
 				else if (a_reprisal >= 10.0f && a_reprisal < 20.0f)
@@ -289,6 +333,9 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);	
+					}
+					if (bHasDeliverance == true) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);	
 					}
 					return;
 				}
