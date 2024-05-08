@@ -58,7 +58,7 @@ float HitEventHandler::ModActorBashMult(RE::Actor* aggressor) {
 	auto bHasSkullrattler = aggressor->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck50_SkullRattler_Perk_50_WasDeadlyBash")->As<RE::BGSPerk>());
 	float a_value = 0.0f;
 	if (bHasSkullrattler == true) {
-		a_value = 0.01f;
+		a_value = 0.001f;
 	}
 	return a_value;
 }
