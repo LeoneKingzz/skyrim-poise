@@ -166,6 +166,7 @@ public:
 	static void triggerStagger(RE::Actor* a_defender, RE::Actor* a_aggressor)
 	{
 		const auto caster = a_defender->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
+		const auto ag_caster = a_aggressor->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
 		RE::MagicItem * SuperRecoil_stagger = RE::TESForm::LookupByEditorID<RE::MagicItem>("parry_stagger_spell");
 		const float a_reprisal = (EldenParry::GetSingleton()->AttackerBeatsParry(a_aggressor, a_defender));
 		auto bHasEldenParryPerk2 = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck20_TimedBlock_Perk_50_OrdASISExclude")->As<RE::BGSPerk>());
@@ -193,7 +194,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -206,7 +207,7 @@ public:
 					if (!(a_reprisal <= 0.0f)) {
 						if (bHasDragonsTail == true) {
 							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-							caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);
+							ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);
 						}
 						if (bHasDeliverance == true) {
 							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));
@@ -222,7 +223,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -235,7 +236,7 @@ public:
 					if (!(a_reprisal <= 0.0f)) {
 						if (bHasDragonsTail == true) {
 							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-							caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);
+							ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);
 						}
 						if (bHasDeliverance == true) {
 							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));
@@ -251,7 +252,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -264,7 +265,7 @@ public:
 					if (!(a_reprisal <= 0.0f)) {
 						if (bHasDragonsTail == true) {
 							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-							caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);
+							ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);
 						}
 						if (bHasDeliverance == true) {
 							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));
@@ -281,7 +282,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -294,7 +295,7 @@ public:
 					if (!(a_reprisal <= 0.0f)) {
 						if (bHasDragonsTail == true) {
 							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-							caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);
+							ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);
 						}
 						if (bHasDeliverance == true) {
 							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));
@@ -310,7 +311,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -322,7 +323,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -343,7 +344,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
@@ -355,7 +356,7 @@ public:
 					a_aggressor->NotifyAnimationGraph(recoilStart);
 					if (bHasDragonsTail == true) {
 						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal/3.0f));
-						caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_defender);	
+						ag_caster->CastSpellImmediate(SuperRecoil_stagger, true, a_aggressor, 1, false, 1, a_aggressor);	
 					}
 					if (bHasDeliverance == true) {
 						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal/3.0f));	
