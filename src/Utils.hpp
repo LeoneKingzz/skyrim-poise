@@ -166,7 +166,6 @@ public:
 	static void triggerStagger(RE::Actor* a_defender, RE::Actor* a_aggressor)
 	{
 		const auto caster = a_defender->GetMagicCaster(RE::MagicSystem::CastingSource::kInstant);
-		RE::MagicItem * SuperRecoil_stagger = RE::TESForm::LookupByEditorID<RE::MagicItem>("parry_stagger_spell");
 		const float a_reprisal = (EldenParry::GetSingleton()->AttackerBeatsParry(a_aggressor, a_defender));
 		auto bHasEldenParryPerk2 = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck20_TimedBlock_Perk_50_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasEldenParryPerk1 = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck20_TimedBlock_Perk_20_OrdASISExclude")->As<RE::BGSPerk>());
