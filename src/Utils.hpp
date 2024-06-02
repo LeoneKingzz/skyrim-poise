@@ -179,7 +179,6 @@ public:
 		auto defender_weaponType_left = (a_defender->GetEquippedObject(true))->As<RE::TESObjectWEAP>()->GetWeaponType();
 
 		
-
 		if (bHasEldenParryPerk2 || bHasEldenParryPerk1) {
 			RE::MagicItem *eldenArmorSpell = nullptr;
 			if (bHasEldenParryPerk2 == true) {
