@@ -173,7 +173,7 @@ public:
 		auto bHasDragonsTail = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck60_DragonTail_Perk_60_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasDeliverance = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck90_Deliverance_Perk_90_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bDefenderHasShield = isEquippedShield(a_defender);
-		auto defender_weaponType = UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess);
+		auto defender_weaponType = UGetAttackWeapon(a_defender->GetActorRuntimeData().currentProcess);
 	
 		
 		if (bHasEldenParryPerk2 || bHasEldenParryPerk1) {
