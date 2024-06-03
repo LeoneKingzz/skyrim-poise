@@ -1,6 +1,7 @@
 #include "EldenParry.h"
 #include "Settings.h"
 #include "Utils.hpp"
+#include "Hooks/PoiseAV.h"
 using uniqueLocker = std::unique_lock<std::shared_mutex>;
 using sharedLocker = std::shared_lock<std::shared_mutex>;
 
@@ -337,6 +338,8 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 
 	
 	// return equipped->As<RE::TESObjectWEAP>();
+	const auto race = actor->GetRace();
+	const auto raceFormID = race->formID;
 
 	if (Utils::isHumanoid(actor)){
 		if (weaponL->IsWeapon()) {
@@ -394,15 +397,19 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
 		}
 	} else {
-		score += 100.0f;  //add race mass or something like choc poise does
+		// score += (scoreSettings.weaponSkillWeight *
+		// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kUnarmedDamage));
+		score += (2.0f *
+					  weaponAI->GetUserData()->CalcUnarmedDamage());
+
+		// weaponAI->cachedValues->cachedDPS
 	}
 	
 	
 	score += (0.35f * actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina));
 
 	
-	const auto race = actor->GetRace();
-	const auto raceFormID = race->formID;
+	
 
 	if (Utils::isHumanoid(actor)) {
 		if (raceFormID == 0x13743 || raceFormID == 0x88840) {
@@ -427,7 +434,7 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 			score += scoreSettings.redguardScore;
 		}
 	} else {
-		score += 100.0f;  //add race mass or something like choc poise does
+		score += (PoiseAV::GetSingleton()->Score_GetBaseActorValue(actor));
 	}
 
 	if (Utils::isHumanoid(actor)) {
@@ -435,8 +442,6 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 		if (actorBase && actorBase->IsFemale()) {
 			score += scoreSettings.femaleScore;
 		}
-	} else {
-		score += 50.0f;
 	}
 
 	if (inlineUtils::isPowerAttacking(actor))

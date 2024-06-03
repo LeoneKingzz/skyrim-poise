@@ -28,6 +28,7 @@ public:
 
 	bool  CanDamageActor(RE::Actor* a_actor);
 	float GetBaseActorValue(RE::Actor* a_actor);
+	float Score_GetBaseActorValue(RE::Actor* a_actor);
 	float GetActorValueMax(RE::Actor* a_actor);
 	void DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, float a_poiseDamage);
 	void  Update(RE::Actor* a_actor, float a_delta);

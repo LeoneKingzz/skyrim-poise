@@ -48,6 +48,36 @@ float PoiseAV::GetBaseActorValue(RE::Actor* a_actor)
 	return std::clamp(health, 0.0f, FLT_MAX);
 }
 
+float PoiseAV::Score_GetBaseActorValue(RE::Actor* a_actor)
+{
+	auto        settings = Settings::GetSingleton();
+	std::string editorID = a_actor->GetRace()->GetFormEditorID();
+
+	float health;
+	if (!editorID.empty() && (settings->JSONSettings["Races"][editorID] != nullptr))
+		health = (float)settings->JSONSettings["Races"][editorID];
+	else
+		health = a_actor->AsActorValueOwner()->GetBaseActorValue(RE::ActorValue::kMass);
+
+	health *= settings->Health.BaseMult;
+	
+
+	//if (auto levelledModifier = (RE::ExtraLevCreaModifier*)a_actor->extraList.GetByType(RE::ExtraDataType::kLevCreaModifier)) {
+	//	auto modifier = levelledModifier->modifier;
+	//	if (modifier.any(RE::LEV_CREA_MODIFIER::kEasy)) {
+	//		health *= 0.75;
+	//	} else if (modifier.any(RE::LEV_CREA_MODIFIER::kMedium)) {
+	//		health *= 1.00;
+	//	} else if (modifier.any(RE::LEV_CREA_MODIFIER::kHard)) {
+	//		health *= 1.25;
+	//	} else if (modifier.any(RE::LEV_CREA_MODIFIER::kVeryHard)) {
+	//		health *= 1.50;
+	//	}
+	//}
+
+	return health;
+}
+
 float PoiseAV::GetActorValueMax([[maybe_unused]] RE::Actor* a_actor)
 {
 	return GetBaseActorValue(a_actor);
