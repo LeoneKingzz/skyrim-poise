@@ -335,13 +335,14 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 	// a_aggressor->GetActorRuntimeData().currentProcess
 
 	// Utils::UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess)
+	// Utils::isHumanoid(actor)
 
 	
 	// return equipped->As<RE::TESObjectWEAP>();
 	const auto race = actor->GetRace();
 	const auto raceFormID = race->formID;
 
-	if (Utils::isHumanoid(actor)){
+	if (weaponL){
 		if (weaponL->IsWeapon()) {
 			auto weapon = (weaponL->As<RE::TESObjectWEAP>());
 			switch (weapon->GetWeaponType()) {
@@ -408,31 +409,26 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 	
 	score += (0.35f * actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina));
 
-	
-	
-
-	if (Utils::isHumanoid(actor)) {
-		if (raceFormID == 0x13743 || raceFormID == 0x88840) {
-			score += scoreSettings.altmerScore;
-		} else if (raceFormID == 0x13740 || raceFormID == 0x8883A) {
-			score += scoreSettings.argonianScore;
-		} else if (raceFormID == 0x13749 || raceFormID == 0x88884) {
-			score += scoreSettings.bosmerScore;
-		} else if (raceFormID == 0x13741 || raceFormID == 0x8883C) {
-			score += scoreSettings.bretonScore;
-		} else if (raceFormID == 0x13742 || raceFormID == 0x8883D) {
-			score += scoreSettings.dunmerScore;
-		} else if (raceFormID == 0x13744 || raceFormID == 0x88844) {
-			score += scoreSettings.imperialScore;
-		} else if (raceFormID == 0x13745 || raceFormID == 0x88845) {
-			score += scoreSettings.khajiitScore;
-		} else if (raceFormID == 0x13746 || raceFormID == 0x88794) {
-			score += scoreSettings.nordScore;
-		} else if (raceFormID == 0x13747 || raceFormID == 0xA82B9) {
-			score += scoreSettings.orcScore;
-		} else if (raceFormID == 0x13748 || raceFormID == 0x88846) {
-			score += scoreSettings.redguardScore;
-		}
+	if (raceFormID == 0x13743 || raceFormID == 0x88840) {
+		score += scoreSettings.altmerScore;
+	} else if (raceFormID == 0x13740 || raceFormID == 0x8883A) {
+		score += scoreSettings.argonianScore;
+	} else if (raceFormID == 0x13749 || raceFormID == 0x88884) {
+		score += scoreSettings.bosmerScore;
+	} else if (raceFormID == 0x13741 || raceFormID == 0x8883C) {
+		score += scoreSettings.bretonScore;
+	} else if (raceFormID == 0x13742 || raceFormID == 0x8883D) {
+		score += scoreSettings.dunmerScore;
+	} else if (raceFormID == 0x13744 || raceFormID == 0x88844) {
+		score += scoreSettings.imperialScore;
+	} else if (raceFormID == 0x13745 || raceFormID == 0x88845) {
+		score += scoreSettings.khajiitScore;
+	} else if (raceFormID == 0x13746 || raceFormID == 0x88794) {
+		score += scoreSettings.nordScore;
+	} else if (raceFormID == 0x13747 || raceFormID == 0xA82B9) {
+		score += scoreSettings.orcScore;
+	} else if (raceFormID == 0x13748 || raceFormID == 0x88846) {
+		score += scoreSettings.redguardScore;
 	} else {
 		score += (PoiseAV::GetSingleton()->Score_GetBaseActorValue(actor));
 	}
