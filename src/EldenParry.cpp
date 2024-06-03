@@ -376,25 +376,25 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 			score += 5.0f;
 			break;
 		}
-		const auto actorValue = weapon->weaponData.skill.get();
-		switch (actorValue) {
-		case RE::ActorValue::kOneHanded:
-			score += (scoreSettings.weaponSkillWeight *
-					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
-			break;
-		case RE::ActorValue::kTwoHanded:
-			score += (scoreSettings.weaponSkillWeight *
-					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kTwoHanded));
-			break;
-		default:
-			// Do nothing
-			break;
-		}
+		// const auto actorValue = weapon->weaponData.skill.get();
+		// switch (actorValue) {
+		// case RE::ActorValue::kOneHanded:
+		// 	score += (scoreSettings.weaponSkillWeight *
+		// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
+		// 	break;
+		// case RE::ActorValue::kTwoHanded:
+		// 	score += (scoreSettings.weaponSkillWeight *
+		// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kTwoHanded));
+		// 	break;
+		// default:
+		// 	// Do nothing
+		// 	break;
+		// }
 
 	} else {
 		score += 70.0f;
-		score += (scoreSettings.weaponSkillWeight *
-				  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
+		// score += (scoreSettings.weaponSkillWeight *
+		// 		  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
 	}
 
 
