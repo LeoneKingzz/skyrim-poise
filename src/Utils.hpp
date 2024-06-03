@@ -191,7 +191,7 @@ public:
 
 		//Hand to Hand //
 
-		if (isHumanoid(a_aggressor) && defender_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee && defender_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee 
+		if (defender_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee && defender_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee 
 		&& aggressor_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee && aggressor_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee) {
 			// and atacker is humanoid//
 			if (isHumanoid(a_aggressor)) {
