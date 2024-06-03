@@ -394,7 +394,7 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
 		}
 	} else {
-		score += 100.0f;
+		score += 100.0f;  //add race mass or something like choc poise does
 	}
 	
 	
@@ -427,7 +427,7 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 			score += scoreSettings.redguardScore;
 		}
 	} else {
-		score += 100.0f;
+		score += 100.0f;  //add race mass or something like choc poise does
 	}
 
 	if (Utils::isHumanoid(actor)) {
