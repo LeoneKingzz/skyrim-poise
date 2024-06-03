@@ -337,118 +337,106 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 
 	
 	// return equipped->As<RE::TESObjectWEAP>();
-	
-	if (weaponL->IsWeapon()) {
-		auto weapon = (weaponL->As<RE::TESObjectWEAP>());
-		switch (weapon->GetWeaponType()) {
-		case RE::WEAPON_TYPE::kOneHandSword:
-			score += scoreSettings.oneHandSwordScore;
-			break;
-		case RE::WEAPON_TYPE::kOneHandAxe:
-			score += scoreSettings.oneHandAxeScore;
-			break;
-		case RE::WEAPON_TYPE::kOneHandMace:
-			score += scoreSettings.oneHandMaceScore;
-			break;
-		case RE::WEAPON_TYPE::kOneHandDagger:
-			score += scoreSettings.oneHandDaggerScore;
-			break;
-		case RE::WEAPON_TYPE::kTwoHandAxe:
-			score += scoreSettings.twoHandAxeScore;
-			break;
-		case RE::WEAPON_TYPE::kTwoHandSword:
-			score += scoreSettings.twoHandSwordScore;
-			break;
-		case RE::WEAPON_TYPE::kHandToHandMelee:
-		    if (Utils::isHumanoid(actor)) {
+
+	if (Utils::isHumanoid(actor)){
+		if (weaponL->IsWeapon()) {
+			auto weapon = (weaponL->As<RE::TESObjectWEAP>());
+			switch (weapon->GetWeaponType()) {
+			case RE::WEAPON_TYPE::kOneHandSword:
+				score += scoreSettings.oneHandSwordScore;
+				break;
+			case RE::WEAPON_TYPE::kOneHandAxe:
+				score += scoreSettings.oneHandAxeScore;
+				break;
+			case RE::WEAPON_TYPE::kOneHandMace:
+				score += scoreSettings.oneHandMaceScore;
+				break;
+			case RE::WEAPON_TYPE::kOneHandDagger:
+				score += scoreSettings.oneHandDaggerScore;
+				break;
+			case RE::WEAPON_TYPE::kTwoHandAxe:
+				score += scoreSettings.twoHandAxeScore;
+				break;
+			case RE::WEAPON_TYPE::kTwoHandSword:
+				score += scoreSettings.twoHandSwordScore;
+				break;
+			case RE::WEAPON_TYPE::kHandToHandMelee:
 				score += -100.0f;
-			} else {
-				score += 200.0f;
+				break;
+			case RE::WEAPON_TYPE::kBow:
+				score += -50.0f;
+				break;
+			case RE::WEAPON_TYPE::kCrossbow:
+				score += -40.0f;
+				break;
+			case RE::WEAPON_TYPE::kStaff:
+				score += 5.0f;
+				break;
 			}
-			break;
-		case RE::WEAPON_TYPE::kBow:
-			score += -50.0f;
-			break;
-		case RE::WEAPON_TYPE::kCrossbow:
-			score += -40.0f;
-			break;
-		case RE::WEAPON_TYPE::kStaff:
-			score += 5.0f;
-			break;
+			const auto actorValue = weapon->weaponData.skill.get();
+			switch (actorValue) {
+			case RE::ActorValue::kOneHanded:
+				score += (scoreSettings.weaponSkillWeight *
+						  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
+				break;
+			case RE::ActorValue::kTwoHanded:
+				score += (scoreSettings.weaponSkillWeight *
+						  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kTwoHanded));
+				break;
+			default:
+				// Do nothing
+				break;
+			}
+
+		} else {
+			score += 70.0f;
+			score += (scoreSettings.weaponSkillWeight *
+					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
 		}
-		// const auto actorValue = weapon->weaponData.skill.get();
-		// switch (actorValue) {
-		// case RE::ActorValue::kOneHanded:
-		// 	score += (scoreSettings.weaponSkillWeight *
-		// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
-		// 	break;
-		// case RE::ActorValue::kTwoHanded:
-		// 	score += (scoreSettings.weaponSkillWeight *
-		// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kTwoHanded));
-		// 	break;
-		// default:
-		// 	// Do nothing
-		// 	break;
-		// }
-
 	} else {
-		score += 70.0f;
-		// score += (scoreSettings.weaponSkillWeight *
-		// 		  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
+		score += 100.0f;
 	}
-
-
+	
+	
 	score += (0.35f * actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina));
 
 	
 	const auto race = actor->GetRace();
 	const auto raceFormID = race->formID;
 
-	if (raceFormID == 0x13743 || raceFormID == 0x88840)
-	{
-		score += scoreSettings.altmerScore;
+	if (Utils::isHumanoid(actor)) {
+		if (raceFormID == 0x13743 || raceFormID == 0x88840) {
+			score += scoreSettings.altmerScore;
+		} else if (raceFormID == 0x13740 || raceFormID == 0x8883A) {
+			score += scoreSettings.argonianScore;
+		} else if (raceFormID == 0x13749 || raceFormID == 0x88884) {
+			score += scoreSettings.bosmerScore;
+		} else if (raceFormID == 0x13741 || raceFormID == 0x8883C) {
+			score += scoreSettings.bretonScore;
+		} else if (raceFormID == 0x13742 || raceFormID == 0x8883D) {
+			score += scoreSettings.dunmerScore;
+		} else if (raceFormID == 0x13744 || raceFormID == 0x88844) {
+			score += scoreSettings.imperialScore;
+		} else if (raceFormID == 0x13745 || raceFormID == 0x88845) {
+			score += scoreSettings.khajiitScore;
+		} else if (raceFormID == 0x13746 || raceFormID == 0x88794) {
+			score += scoreSettings.nordScore;
+		} else if (raceFormID == 0x13747 || raceFormID == 0xA82B9) {
+			score += scoreSettings.orcScore;
+		} else if (raceFormID == 0x13748 || raceFormID == 0x88846) {
+			score += scoreSettings.redguardScore;
+		}
+	} else {
+		score += 100.0f;
 	}
-	else if (raceFormID == 0x13740 || raceFormID == 0x8883A)
-	{
-		score += scoreSettings.argonianScore;
-	}
-	else if (raceFormID == 0x13749 || raceFormID == 0x88884)
-	{
-		score += scoreSettings.bosmerScore;
-	}
-	else if (raceFormID == 0x13741 || raceFormID == 0x8883C)
-	{
-		score += scoreSettings.bretonScore;
-	}
-	else if (raceFormID == 0x13742 || raceFormID == 0x8883D)
-	{
-		score += scoreSettings.dunmerScore;
-	}
-	else if (raceFormID == 0x13744 || raceFormID == 0x88844)
-	{
-		score += scoreSettings.imperialScore;
-	}
-	else if (raceFormID == 0x13745 || raceFormID == 0x88845)
-	{
-		score += scoreSettings.khajiitScore;
-	}
-	else if (raceFormID == 0x13746 || raceFormID == 0x88794)
-	{
-		score += scoreSettings.nordScore;
-	}
-	else if (raceFormID == 0x13747 || raceFormID == 0xA82B9)
-	{
-		score += scoreSettings.orcScore;
-	}
-	else if (raceFormID == 0x13748 || raceFormID == 0x88846)
-	{
-		score += scoreSettings.redguardScore;
-	} 
 
-	const auto actorBase = actor->GetActorBase();
-	if (actorBase && actorBase->IsFemale())
-	{
-		score += scoreSettings.femaleScore;
+	if (Utils::isHumanoid(actor)) {
+		const auto actorBase = actor->GetActorBase();
+		if (actorBase && actorBase->IsFemale()) {
+			score += scoreSettings.femaleScore;
+		}
+	} else {
+		score += 50.0f;
 	}
 
 	if (inlineUtils::isPowerAttacking(actor))
