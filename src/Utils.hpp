@@ -173,11 +173,9 @@ public:
 		auto bHasDragonsTail = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck60_DragonTail_Perk_60_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasDeliverance = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck90_Deliverance_Perk_90_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bDefenderHasShield = isEquippedShield(a_defender);
-		auto aggressor_weaponType_right = (a_aggressor->GetEquippedObject(false))->As<RE::TESObjectWEAP>()->GetWeaponType();
-		auto aggressor_weaponType_left = (a_aggressor->GetEquippedObject(true))->As<RE::TESObjectWEAP>()->GetWeaponType();
-		auto defender_weaponType_right = (a_defender->GetEquippedObject(false))->As<RE::TESObjectWEAP>()->GetWeaponType();
-		auto defender_weaponType_left = (a_defender->GetEquippedObject(true))->As<RE::TESObjectWEAP>()->GetWeaponType();
-
+		auto aggressor_weaponType = UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess);
+		auto defender_weaponType = UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess);
+	
 		
 		if (bHasEldenParryPerk2 || bHasEldenParryPerk1) {
 			RE::MagicItem *eldenArmorSpell = nullptr;
@@ -191,8 +189,7 @@ public:
 
 		//Hand to Hand //
 
-		if (defender_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee && defender_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee 
-		&& aggressor_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee && aggressor_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee) {
+		if (defender_weaponType->IsHandToHandMelee() && aggressor_weaponType->IsHandToHandMelee()) {
 			// and atacker is humanoid//
 			if (isHumanoid(a_aggressor)) {
 				if (bHasEldenParryPerk2) {
@@ -284,8 +281,8 @@ public:
 
 		// defender parries with hand against a weapon or sheild = punish defender)
 
-		if (defender_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee && defender_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee) {
-			if (!(aggressor_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee || aggressor_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee)) {
+		if (defender_weaponType->IsHandToHandMelee()) {
+			if (!(aggressor_weaponType->IsHandToHandMelee())) {
 				a_defender->NotifyAnimationGraph(attackStop);
 				if (a_reprisal <= 0.0f) {
 					a_reprisal += 50.0f;
@@ -297,8 +294,8 @@ public:
 
 		// defender parries with weapon/sheild against hand attack and attacker is humanoid = punish attacker)
 
-		if (!(defender_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee || defender_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee)) {
-			if (aggressor_weaponType_right == RE::WEAPON_TYPE::kHandToHandMelee && aggressor_weaponType_left == RE::WEAPON_TYPE::kHandToHandMelee && isHumanoid(a_aggressor)) {
+		if (!(defender_weaponType->IsHandToHandMelee())) {
+			if (aggressor_weaponType->IsHandToHandMelee() && isHumanoid(a_aggressor)) {
 				a_aggressor->NotifyAnimationGraph(attackStop);
 				if (a_reprisal <= 0.0f) {
 					a_reprisal += 50.0f;
@@ -516,6 +513,12 @@ public:
 	{
 		auto bodyPartData = a_actor->GetRace() ? a_actor->GetRace()->bodyPartData : nullptr;
 		return bodyPartData && bodyPartData->GetFormID() == 0x1d;
+	}
+
+	static const RE::TESObjectWEAP* UGetAttackWeapon(RE::AIProcess* const aiProcess)
+	{
+		const RE::TESForm* equipped = aiProcess->high->attackData->IsLeftAttack() ? aiProcess->GetEquippedLeftHand() : aiProcess->GetEquippedRightHand();
+		return equipped->As<RE::TESObjectWEAP>();
 	}
 
 	static void resetProjectileOwner(RE::Projectile* a_projectile, RE::Actor* a_actor, RE::hkpCollidable* a_projectile_collidable)
