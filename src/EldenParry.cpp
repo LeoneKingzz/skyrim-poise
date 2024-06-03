@@ -321,41 +321,26 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 {
 	float score = 0.0f;
 
-	RE::TESObjectWEAP* weapon = nullptr;
+	auto weaponAI = actor->GetActorRuntimeData().currentProcess;
 
-	bool WeaponShield = false;
+	const RE::TESForm* weaponL = weaponAI->high->attackData->IsLeftAttack() ? weaponAI->GetEquippedLeftHand() : weaponAI->GetEquippedRightHand();
 
-	auto defenderLeftEquipped = actor->GetEquippedObject(true);
-	auto defenderRightEquipped = actor->GetEquippedObject(false);
+	// auto weapon = weaponL->IsWeapon() ? weaponL->As<RE::TESObjectWEAP>() :
+
+	// RE::TESObjectWEAP* weapon = nullptr;
+
+	// bool WeaponShield = false;
+
+	// a_aggressor->GetActorRuntimeData().currentProcess
+
+	// Utils::UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess)
+
 	
-	if (defenderLeftEquipped && (defenderLeftEquipped->IsWeapon() || defenderLeftEquipped->IsArmor())) {
-
-		if (defenderLeftEquipped->As<RE::TESObjectWEAP>()) {
-			weapon = (defenderLeftEquipped->As<RE::TESObjectWEAP>());
-		
-			switch (weapon->GetWeaponType()) {
-			case RE::WEAPON_TYPE::kOneHandSword:
-				score += scoreSettings.oneHandSwordScore;
-				break;
-			case RE::WEAPON_TYPE::kOneHandAxe:
-			    score += scoreSettings.oneHandAxeScore;
-				break;
-			case RE::WEAPON_TYPE::kOneHandMace:
-			    score += scoreSettings.oneHandMaceScore;
-				break;
-			case RE::WEAPON_TYPE::kOneHandDagger:
-			    score += scoreSettings.oneHandDaggerScore;
-				break;
-			}
-		} else if (defenderLeftEquipped->IsArmor()) {
-			WeaponShield = true;
-			score += 70.0f;
-		}
-
-	} else if (defenderRightEquipped && (defenderRightEquipped->IsWeapon())) {
-		weapon = (defenderRightEquipped->As<RE::TESObjectWEAP>());
-		switch (weapon->GetWeaponType())
-		{
+	// return equipped->As<RE::TESObjectWEAP>();
+	
+	if (weaponL->IsWeapon()) {
+		auto weapon = (weaponL->As<RE::TESObjectWEAP>());
+		switch (weapon->GetWeaponType()) {
 		case RE::WEAPON_TYPE::kOneHandSword:
 			score += scoreSettings.oneHandSwordScore;
 			break;
@@ -375,16 +360,24 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 			score += scoreSettings.twoHandSwordScore;
 			break;
 		case RE::WEAPON_TYPE::kHandToHandMelee:
+		    if (Utils::isHumanoid(actor)) {
+				score += -100.0f;
+			} else {
+				score += 200.0f;
+			}
+			break;
+		case RE::WEAPON_TYPE::kBow:
 			score += -50.0f;
 			break;
+		case RE::WEAPON_TYPE::kCrossbow:
+			score += -40.0f;
+			break;
+		case RE::WEAPON_TYPE::kStaff:
+			score += 5.0f;
+			break;
 		}
-	}
-
-	if (WeaponShield == false) {
-
 		const auto actorValue = weapon->weaponData.skill.get();
-		switch (actorValue)
-		{
+		switch (actorValue) {
 		case RE::ActorValue::kOneHanded:
 			score += (scoreSettings.weaponSkillWeight *
 					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
@@ -397,12 +390,15 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 			// Do nothing
 			break;
 		}
+
 	} else {
+		score += 70.0f;
 		score += (scoreSettings.weaponSkillWeight *
 				  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
 	}
 
-	score += (actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina));
+
+	score += (0.35f * actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina));
 
 	
 	const auto race = actor->GetRace();
@@ -447,7 +443,7 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 	else if (raceFormID == 0x13748 || raceFormID == 0x88846)
 	{
 		score += scoreSettings.redguardScore;
-	}
+	} 
 
 	const auto actorBase = actor->GetActorBase();
 	if (actorBase && actorBase->IsFemale())
