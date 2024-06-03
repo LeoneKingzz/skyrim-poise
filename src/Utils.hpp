@@ -173,7 +173,6 @@ public:
 		auto bHasDragonsTail = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck60_DragonTail_Perk_60_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bHasDeliverance = a_defender->HasPerk(RE::BGSPerk::LookupByEditorID("ORD_Bck90_Deliverance_Perk_90_OrdASISExclude")->As<RE::BGSPerk>());
 		auto bDefenderHasShield = isEquippedShield(a_defender);
-		auto aggressor_weaponType = UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess);
 		auto defender_weaponType = UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess);
 	
 		
@@ -185,7 +184,20 @@ public:
 				eldenArmorSpell = RE::TESForm::LookupByEditorID<RE::MagicItem>("ORD_Bck_TimedBlock_Spell_Proc");
 			}
 			caster->CastSpellImmediate(eldenArmorSpell, true, a_defender, 1, false, 45, a_defender);
+			
 		}
+
+		if (!isHumanoid(a_aggressor) && defender_weaponType->IsHandToHandMelee()) {
+			//and attacker is not humanoid == punish defender
+			a_defender->NotifyAnimationGraph(attackStop);
+			if (a_reprisal <= 0.0f) {
+				a_reprisal += 50.0f;
+			}
+			PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, a_reprisal);
+			return;
+		}
+
+		auto aggressor_weaponType = UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess);
 
 		//Hand to Hand //
 
@@ -269,13 +281,13 @@ public:
 				}
 
 			} else {
-				//and attacker is not humanoid == punish defender
-				a_defender->NotifyAnimationGraph(attackStop);
-				if (a_reprisal <= 0.0f) {
-					a_reprisal += 50.0f;
-				}
-				PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, a_reprisal);
-				return;
+				// //and attacker is not humanoid == punish defender
+				// a_defender->NotifyAnimationGraph(attackStop);
+				// if (a_reprisal <= 0.0f) {
+				// 	a_reprisal += 50.0f;
+				// }
+				// PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, a_reprisal);
+				// return;
 			}
 		}
 
