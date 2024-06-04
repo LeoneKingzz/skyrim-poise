@@ -322,91 +322,106 @@ float EldenParry::GetScore(RE::Actor *actor, const Milf::Scores &scoreSettings)
 {
 	float score = 0.0f;
 
-	auto weaponAI = actor->GetActorRuntimeData().currentProcess;
-
-	const RE::TESForm* weaponL = weaponAI->high->attackData->IsLeftAttack() ? weaponAI->GetEquippedLeftHand() : weaponAI->GetEquippedRightHand();
-
-	// auto weapon = weaponL->IsWeapon() ? weaponL->As<RE::TESObjectWEAP>() :
-
-	// RE::TESObjectWEAP* weapon = nullptr;
-
-	// bool WeaponShield = false;
-
-	// a_aggressor->GetActorRuntimeData().currentProcess
-
-	// Utils::UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess)
-	// Utils::isHumanoid(actor)
-
-	
-	// return equipped->As<RE::TESObjectWEAP>();
 	const auto race = actor->GetRace();
 	const auto raceFormID = race->formID;
 
-	if (weaponL){
-		if (weaponL->IsWeapon()) {
-			auto weapon = (weaponL->As<RE::TESObjectWEAP>());
-			switch (weapon->GetWeaponType()) {
-			case RE::WEAPON_TYPE::kOneHandSword:
-				score += scoreSettings.oneHandSwordScore;
-				break;
-			case RE::WEAPON_TYPE::kOneHandAxe:
-				score += scoreSettings.oneHandAxeScore;
-				break;
-			case RE::WEAPON_TYPE::kOneHandMace:
-				score += scoreSettings.oneHandMaceScore;
-				break;
-			case RE::WEAPON_TYPE::kOneHandDagger:
-				score += scoreSettings.oneHandDaggerScore;
-				break;
-			case RE::WEAPON_TYPE::kTwoHandAxe:
-				score += scoreSettings.twoHandAxeScore;
-				break;
-			case RE::WEAPON_TYPE::kTwoHandSword:
-				score += scoreSettings.twoHandSwordScore;
-				break;
-			case RE::WEAPON_TYPE::kHandToHandMelee:
-				score += -100.0f;
-				break;
-			case RE::WEAPON_TYPE::kBow:
-				score += -50.0f;
-				break;
-			case RE::WEAPON_TYPE::kCrossbow:
-				score += -40.0f;
-				break;
-			case RE::WEAPON_TYPE::kStaff:
-				score += 5.0f;
-				break;
-			}
-			const auto actorValue = weapon->weaponData.skill.get();
-			switch (actorValue) {
-			case RE::ActorValue::kOneHanded:
+	auto weaponAI = actor->GetActorRuntimeData().currentProcess;
+
+	if (weaponAI && weaponAI->high && weaponAI->high->attackData) {
+		const RE::TESForm* weaponL = weaponAI->high->attackData->IsLeftAttack() ? weaponAI->GetEquippedLeftHand() : weaponAI->GetEquippedRightHand();
+
+		// auto weapon = weaponL->IsWeapon() ? weaponL->As<RE::TESObjectWEAP>() :
+
+		// RE::TESObjectWEAP* weapon = nullptr;
+
+		// bool WeaponShield = false;
+
+		// a_aggressor->GetActorRuntimeData().currentProcess
+
+		// Utils::UGetAttackWeapon(a_aggressor->GetActorRuntimeData().currentProcess)
+		// Utils::isHumanoid(actor)
+
+		// return equipped->As<RE::TESObjectWEAP>();
+
+		if (weaponL) {
+			if (weaponL->IsWeapon()) {
+				auto weapon = (weaponL->As<RE::TESObjectWEAP>());
+				switch (weapon->GetWeaponType()) {
+				case RE::WEAPON_TYPE::kOneHandSword:
+					score += scoreSettings.oneHandSwordScore;
+					break;
+				case RE::WEAPON_TYPE::kOneHandAxe:
+					score += scoreSettings.oneHandAxeScore;
+					break;
+				case RE::WEAPON_TYPE::kOneHandMace:
+					score += scoreSettings.oneHandMaceScore;
+					break;
+				case RE::WEAPON_TYPE::kOneHandDagger:
+					score += scoreSettings.oneHandDaggerScore;
+					break;
+				case RE::WEAPON_TYPE::kTwoHandAxe:
+					score += scoreSettings.twoHandAxeScore;
+					break;
+				case RE::WEAPON_TYPE::kTwoHandSword:
+					score += scoreSettings.twoHandSwordScore;
+					break;
+				case RE::WEAPON_TYPE::kHandToHandMelee:
+					score += -100.0f;
+					break;
+				case RE::WEAPON_TYPE::kBow:
+					score += -50.0f;
+					break;
+				case RE::WEAPON_TYPE::kCrossbow:
+					score += -40.0f;
+					break;
+				case RE::WEAPON_TYPE::kStaff:
+					score += 5.0f;
+					break;
+				}
+				const auto actorValue = weapon->weaponData.skill.get();
+				switch (actorValue) {
+				case RE::ActorValue::kOneHanded:
+					score += (scoreSettings.weaponSkillWeight *
+							  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
+					break;
+				case RE::ActorValue::kTwoHanded:
+					score += (scoreSettings.weaponSkillWeight *
+							  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kTwoHanded));
+					break;
+				default:
+					// Do nothing
+					break;
+				}
+
+			} else {
+				score += 70.0f;
 				score += (scoreSettings.weaponSkillWeight *
-						  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kOneHanded));
-				break;
-			case RE::ActorValue::kTwoHanded:
-				score += (scoreSettings.weaponSkillWeight *
-						  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kTwoHanded));
-				break;
-			default:
-				// Do nothing
-				break;
+						  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
 			}
 
 		} else {
-			score += 70.0f;
-			score += (scoreSettings.weaponSkillWeight *
-					  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kBlock));
+			// score += (scoreSettings.weaponSkillWeight *
+			// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kUnarmedDamage));
+			if (weaponAI) {
+				score += (2.0f *
+						  weaponAI->GetUserData()->CalcUnarmedDamage());
+
+				// weaponAI->cachedValues->cachedDPS
+			}
+			
 		}
+
 	} else {
 		// score += (scoreSettings.weaponSkillWeight *
 		// 			  actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kUnarmedDamage));
-		score += (2.0f *
+		if (weaponAI) {
+			score += (2.0f *
 					  weaponAI->GetUserData()->CalcUnarmedDamage());
 
-		// weaponAI->cachedValues->cachedDPS
+			// weaponAI->cachedValues->cachedDPS
+		}
 	}
-	
-	
+
 	score += (0.35f * actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kStamina));
 
 	if (raceFormID == 0x13743 || raceFormID == 0x88840) {
