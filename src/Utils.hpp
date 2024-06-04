@@ -190,95 +190,356 @@ public:
 			
 		}
 
-		if (!weaponL && !isHumanoid(a_aggressor) && defender_weaponType->IsHandToHandMelee()) {
-			//and attacker is not humanoid/ it's a tiny creature
-			if (PoiseAV::GetSingleton()->Score_GetBaseActorValue(a_aggressor) <= 11.0f) {
-				if (bHasEldenParryPerk2) {
-					if (a_reprisal >= 10.0f) {
-						a_aggressor->NotifyAnimationGraph(recoilLargeStart);
-						if (bHasDragonsTail) {
-							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+        // if the weapon is underdetermined//
+		if (!weaponL) {
+			if (!isHumanoid(a_aggressor)) {
+				//and attacker is not humanoid/
+				if (defender_weaponType->IsHandToHandMelee()) {
+					//Defender parries with hand//
+					if (PoiseAV::GetSingleton()->Score_GetBaseActorValue(a_aggressor) <= 11.0f) {
+						//it's a tiny creature//
+						if (bHasEldenParryPerk2) {
+							if (a_reprisal >= 10.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal < 10.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								if (!(a_reprisal <= 0.0f)) {
+									if (bHasDragonsTail) {
+										PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+									}
+									if (bHasDeliverance) {
+										AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+									}
+								}
+								return;
+							}
+						} else if (bHasEldenParryPerk1) {
+							if (a_reprisal >= 25.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal >= 5.0f && a_reprisal < 25.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal < 5.0f) {
+								a_defender->NotifyAnimationGraph(attackStop);
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								return;
+							}
+						} else {
+							if (a_reprisal >= 20.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal >= 10.0f && a_reprisal < 20.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal >= 0.0f && a_reprisal < 10.0f) {
+								a_defender->NotifyAnimationGraph(attackStop);
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								return;
+							} else if (a_reprisal < 0.0f) {
+								a_defender->NotifyAnimationGraph(attackStop);
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								return;
+							}
 						}
-						if (bHasDeliverance) {
-							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+
+					} else {
+						//is mid to massive creature== punish defender
+						a_defender->NotifyAnimationGraph(attackStop);
+						if (a_reprisal <= 0.0f) {
+							a_reprisal += 100.0f;
 						}
+						PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, a_reprisal);
 						return;
-					} else if (a_reprisal < 10.0f) {
-						a_aggressor->NotifyAnimationGraph(recoilStart);
-						if (!(a_reprisal <= 0.0f)) {
+					}
+
+				} else {
+					//Defender parries with shield//
+					if (bDefenderHasShield) {
+						if (bHasEldenParryPerk2) {
+							if (a_reprisal >= 20.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal < 20.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								if (!(a_reprisal <= 0.0f)) {
+									if (bHasDragonsTail) {
+										PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+									}
+									if (bHasDeliverance) {
+										AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+									}
+								} else {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, -(a_reprisal));
+								}
+								return;
+							}
+						} else if (bHasEldenParryPerk1) {
+							if (a_reprisal >= 15.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal < 15.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								if (!(a_reprisal <= 0.0f)) {
+									if (bHasDragonsTail) {
+										PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+									}
+									if (bHasDeliverance) {
+										AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+									}
+								} else {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, -(a_reprisal));
+								}
+								return;
+							}
+						} else {
+							if (a_reprisal >= 10.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+								return;
+							} else if (a_reprisal < 10.0f) {
+								a_aggressor->NotifyAnimationGraph(recoilStart);
+								if (!(a_reprisal <= 0.0f)) {
+									if (bHasDragonsTail) {
+										PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+									}
+									if (bHasDeliverance) {
+										AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+									}
+								} else {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, -(a_reprisal));
+								}
+								return;
+							}
+						}
+					}
+					//Defender parries with weapon//
+					if (bHasEldenParryPerk2) {
+						if (a_reprisal >= 10.0f) {
+							a_aggressor->NotifyAnimationGraph(recoilLargeStart);
 							if (bHasDragonsTail) {
 								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
 							}
 							if (bHasDeliverance) {
 								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
 							}
+							return;
+						} else if (a_reprisal < 10.0f) {
+							a_aggressor->NotifyAnimationGraph(recoilStart);
+							if (!(a_reprisal <= 0.0f)) {
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+							} else {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, -(a_reprisal));
+							}
+							return;
 						}
-						return;
+					} else if (bHasEldenParryPerk1) {
+						if (a_reprisal >= 25.0f) {
+							a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal >= 5.0f && a_reprisal < 25.0f) {
+							a_aggressor->NotifyAnimationGraph(recoilStart);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal < 5.0f) {
+							a_defender->NotifyAnimationGraph(recoilStart);
+							a_aggressor->NotifyAnimationGraph(recoilStart);
+							if (a_reprisal < 0.0) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, -(a_reprisal));
+							}
+							return;
+						}
+					} else {
+						if (a_reprisal >= 20.0f) {
+							a_aggressor->NotifyAnimationGraph(recoilLargeStart);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal >= 10.0f && a_reprisal < 20.0f) {
+							a_aggressor->NotifyAnimationGraph(recoilStart);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal >= 0.0f && a_reprisal < 10.0f) {
+							a_defender->NotifyAnimationGraph(recoilStart);
+							a_aggressor->NotifyAnimationGraph(recoilStart);
+							return;
+						} else if (a_reprisal < 0.0f) {
+							a_defender->NotifyAnimationGraph(recoilLargeStart);
+							a_aggressor->NotifyAnimationGraph(recoilStart);
+							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, -(a_reprisal));
+							return;
+						}
 					}
-				} else if (bHasEldenParryPerk1) {
-					if (a_reprisal >= 25.0f) {
-						a_aggressor->NotifyAnimationGraph(recoilLargeStart);
-						if (bHasDragonsTail) {
-							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+				}
+			} else {
+				//Attacker is humanoid//
+				if (defender_weaponType->IsHandToHandMelee()) {
+					//Dedender parrries with hand//
+					if (bHasEldenParryPerk2) {
+						if (a_reprisal >= 10.0f) {
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal < 10.0f) {
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							if (!(a_reprisal <= 0.0f)) {
+								if (bHasDragonsTail) {
+									PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+								}
+								if (bHasDeliverance) {
+									AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+								}
+							}
+							return;
 						}
-						if (bHasDeliverance) {
-							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+					} else if (bHasEldenParryPerk1) {
+						if (a_reprisal >= 25.0f) {
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal >= 5.0f && a_reprisal < 25.0f) {
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal < 5.0f) {
+							a_defender->NotifyAnimationGraph(attackStop);
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							return;
 						}
-						return;
-					} else if (a_reprisal >= 5.0f && a_reprisal < 25.0f) {
-						a_aggressor->NotifyAnimationGraph(recoilStart);
-						if (bHasDragonsTail) {
-							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+					} else {
+						if (a_reprisal >= 20.0f) {
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal >= 10.0f && a_reprisal < 20.0f) {
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							if (bHasDragonsTail) {
+								PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
+							}
+							if (bHasDeliverance) {
+								AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
+							}
+							return;
+						} else if (a_reprisal >= 0.0f && a_reprisal < 10.0f) {
+							a_defender->NotifyAnimationGraph(attackStop);
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							return;
+						} else if (a_reprisal < 0.0f) {
+							a_defender->NotifyAnimationGraph(attackStop);
+							a_aggressor->NotifyAnimationGraph(attackStop);
+							return;
 						}
-						if (bHasDeliverance) {
-							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
-						}
-						return;
-					} else if (a_reprisal < 5.0f) {
-						a_defender->NotifyAnimationGraph(attackStop);
-						a_aggressor->NotifyAnimationGraph(recoilStart);
-						return;
 					}
 				} else {
-					if (a_reprisal >= 20.0f) {
-						a_aggressor->NotifyAnimationGraph(recoilLargeStart);
-						if (bHasDragonsTail) {
-							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
-						}
-						if (bHasDeliverance) {
-							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
-						}
-						return;
-					} else if (a_reprisal >= 10.0f && a_reprisal < 20.0f) {
-						a_aggressor->NotifyAnimationGraph(recoilStart);
-						if (bHasDragonsTail) {
-							PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, (a_reprisal / 3.0f));
-						}
-						if (bHasDeliverance) {
-							AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, (a_reprisal / 3.0f));
-						}
-						return;
-					} else if (a_reprisal >= 0.0f && a_reprisal < 10.0f) {
-						a_defender->NotifyAnimationGraph(attackStop);
-						a_aggressor->NotifyAnimationGraph(recoilStart);
-						return;
-					} else if (a_reprisal < 0.0f) {
-						a_defender->NotifyAnimationGraph(attackStop);
-						a_aggressor->NotifyAnimationGraph(recoilStart);
-						return;
+					//Dedender parrries with weapon or shield//
+					a_aggressor->NotifyAnimationGraph(attackStop);
+					if (a_reprisal <= 0.0f) {
+						a_reprisal += 50.0f;
 					}
+					PoiseAV::GetSingleton()->DamageAndCheckPoise(a_aggressor, a_defender, a_reprisal);
+					if (bHasDeliverance) {
+						AVManager::GetSingleton()->RestoreActorValue(PoiseAV::g_avName, a_defender, a_reprisal);
+					}
+					return;
 				}
-
-			} else {
-				//is mid to massive creature== punish defender
-				a_defender->NotifyAnimationGraph(attackStop);
-				if (a_reprisal <= 0.0f) {
-					a_reprisal += 100.0f;
-				}
-				PoiseAV::GetSingleton()->DamageAndCheckPoise(a_defender, a_aggressor, a_reprisal);
-				return;
 			}
 		}
+
+
+		/// Filtered out undefined weapon, now define the weapon//
 
 		auto aggressor_weaponType = weaponL->As<RE::TESObjectWEAP>();
 
