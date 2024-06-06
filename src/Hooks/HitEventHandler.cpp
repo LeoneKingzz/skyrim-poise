@@ -118,14 +118,32 @@ float HitEventHandler::RecalculateStagger(RE::Actor* target, RE::Actor* aggresso
 	return stagger;
 }
 
+inline float getDamageMult(bool is_victim_player)
+{
+	auto              difficulty = RE::PlayerCharacter::GetSingleton()->GetGameStatsData().difficulty;
+	const std::vector diff_str = { "VE", "E", "N", "H", "VH", "L" };
+	auto              setting_name = fmt::format("fDiffMultHP{}PC{}", is_victim_player ? "To" : "By", diff_str[difficulty]);
+	auto              setting = RE::GameSettingCollection::GetSingleton()->GetSetting(setting_name.c_str());
+	return setting->data.f;
+}
 
 void HitEventHandler::PreProcessHit(RE::Actor* target, RE::HitData* hitData)
 {
 	auto poiseAV = PoiseAV::GetSingleton();
 	auto aggressor = hitData->aggressor ? hitData->aggressor.get().get() : nullptr;
 	if (aggressor && poiseAV->CanDamageActor(target)) {
-		auto poiseDamage = RecalculateStagger(target, aggressor, hitData);
-		poiseAV->DamageAndCheckPoise(target, aggressor, poiseDamage);
+		if (aggressor->IsPlayerRef()) {
+			float dmg_mult = getDamageMult(aggressor);
+			if (!(aggressor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealth) <= hitData->totalDamage * dmg_mult)) {
+				auto poiseDamage = RecalculateStagger(target, aggressor, hitData);
+				poiseAV->DamageAndCheckPoise(target, aggressor, poiseDamage);
+			}
+		} else {
+			if (!(aggressor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealth) <= hitData->totalDamage)) {
+				auto poiseDamage = RecalculateStagger(target, aggressor, hitData);
+				poiseAV->DamageAndCheckPoise(target, aggressor, poiseDamage);
+			}
+		}
 	}
 	hitData->stagger = static_cast<uint32_t>(0.00);
 }
