@@ -132,14 +132,14 @@ void HitEventHandler::PreProcessHit(RE::Actor* target, RE::HitData* hitData)
 	auto poiseAV = PoiseAV::GetSingleton();
 	auto aggressor = hitData->aggressor ? hitData->aggressor.get().get() : nullptr;
 	if (aggressor && poiseAV->CanDamageActor(target)) {
-		if (aggressor->IsPlayerRef()) {
-			float dmg_mult = getDamageMult(aggressor);
-			if (!(aggressor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealth) <= hitData->totalDamage * dmg_mult)) {
+		if (target->IsPlayerRef()) {
+			float dmg_mult = getDamageMult(target->IsPlayerRef());
+			if (!(target->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealth) <= hitData->totalDamage * dmg_mult)) {
 				auto poiseDamage = RecalculateStagger(target, aggressor, hitData);
 				poiseAV->DamageAndCheckPoise(target, aggressor, poiseDamage);
 			}
 		} else {
-			if (!(aggressor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealth) <= hitData->totalDamage)) {
+			if (!(target->AsActorValueOwner()->GetActorValue(RE::ActorValue::kHealth) <= hitData->totalDamage)) {
 				auto poiseDamage = RecalculateStagger(target, aggressor, hitData);
 				poiseAV->DamageAndCheckPoise(target, aggressor, poiseDamage);
 			}
