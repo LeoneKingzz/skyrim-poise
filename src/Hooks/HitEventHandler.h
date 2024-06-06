@@ -31,8 +31,11 @@ protected:
 		{
 			static void thunk(RE::Actor* target, RE::HitData* hitData)
 			{
-				auto handler = GetSingleton();
-				handler->PreProcessHit(target, hitData);
+				bool bKaputt_IsInKillMove = false;
+				if (target->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
+					auto handler = GetSingleton();
+					handler->PreProcessHit(target, hitData);
+				}
 				func(target, hitData);
 			}
 			static inline REL::Relocation<decltype(thunk)> func;
