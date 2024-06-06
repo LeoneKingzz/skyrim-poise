@@ -116,9 +116,10 @@ public:
 		using func_t = decltype(&TryStagger);
 		REL::Relocation<func_t> func{ REL::RelocationID(36700, 37710) };
 		bool bKaputt_IsInKillMove = false;
-		if (a_target->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
-			func(a_target, a_staggerMult, a_aggressor);
-		}
+		func(a_target, a_staggerMult, a_aggressor);
+		// if (a_target->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
+		// 	func(a_target, a_staggerMult, a_aggressor);
+		// }
 	}
 
 
