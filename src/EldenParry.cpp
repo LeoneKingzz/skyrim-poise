@@ -2,8 +2,10 @@
 #include "Settings.h"
 #include "Utils.hpp"
 #include "Hooks/PoiseAV.h"
+#include "Hooks/HitEventHandler.h"
 using uniqueLocker = std::unique_lock<std::shared_mutex>;
 using sharedLocker = std::shared_lock<std::shared_mutex>;
+
 
 void EldenParry::init() {
 	logger::info("Obtaining precision API...");
@@ -15,6 +17,7 @@ void EldenParry::init() {
 			PRECISION_API::APIResult::OK) {
 			logger::info("Successfully registered precision API prehit callback.");
 		}
+		// _precision_API->AddPostHitCallback(SKSE::GetPluginHandle(), HitEventHandler::PoiseCallback_Post);
 	} else {
 		logger::info("Precision API not found.");
 	}
@@ -40,6 +43,7 @@ void EldenParry::init() {
 	_GMST_fCombatHitConeAngle = RE::GameSettingCollection::GetSingleton()->GetSetting("fCombatHitConeAngle")->GetFloat();
 	_parryAngle = _GMST_fCombatHitConeAngle;
 }
+
 
 void EldenParry::update() {
 	if (!_bUpdate) {

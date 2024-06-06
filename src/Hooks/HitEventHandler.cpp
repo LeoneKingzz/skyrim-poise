@@ -118,6 +118,7 @@ float HitEventHandler::RecalculateStagger(RE::Actor* target, RE::Actor* aggresso
 	return stagger;
 }
 
+
 void HitEventHandler::PreProcessHit(RE::Actor* target, RE::HitData* hitData)
 {
 	auto poiseAV = PoiseAV::GetSingleton();
@@ -128,3 +129,15 @@ void HitEventHandler::PreProcessHit(RE::Actor* target, RE::HitData* hitData)
 	}
 	hitData->stagger = static_cast<uint32_t>(0.00);
 }
+
+// void HitEventHandler::PoiseCallback_Post(const PRECISION_API::PrecisionHitData& a_precisionHitData, const RE::HitData& hitData)
+// {
+// 	if (!a_precisionHitData.target || !a_precisionHitData.target->Is(RE::FormType::ActorCharacter)) {
+// 		return;
+// 	}
+// 	auto handler = GetSingleton();
+// 	RE::HitData* hitData_ptr = hitData;
+
+// 	handler->PreProcessHit(a_precisionHitData.target->As<RE::Actor>(), hitData_ptr);
+// 	return;
+// }

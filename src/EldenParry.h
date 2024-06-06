@@ -2,11 +2,13 @@
 #include <memory>
 #include "lib/PrecisionAPI.h"
 #include "lib/ValhallaCombatAPI.h"
+// #include "Hooks/HitEventHandler.h"
 #include <mutex>
 #include <shared_mutex>
 
 #include <unordered_set>
 using std::string;
+using PRECISION_API::PostHitCallback;
 
 class Milf
 {

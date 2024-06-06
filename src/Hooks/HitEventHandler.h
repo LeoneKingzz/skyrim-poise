@@ -1,7 +1,10 @@
 #pragma once
+// #include "EldenParry.h"
+// #include "lib/PrecisionAPI.h"
 
 class HitEventHandler
 {
+	// friend EldenParry;
 public:
 	[[nodiscard]] static HitEventHandler* GetSingleton()
 	{
@@ -31,11 +34,8 @@ protected:
 		{
 			static void thunk(RE::Actor* target, RE::HitData* hitData)
 			{
-				bool bKaputt_IsInKillMove = false;
-				if (target->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
-					auto handler = GetSingleton();
-					handler->PreProcessHit(target, hitData);
-				}
+				auto handler = GetSingleton();
+				handler->PreProcessHit(target, hitData);
 				func(target, hitData);
 			}
 			static inline REL::Relocation<decltype(thunk)> func;
@@ -48,6 +48,7 @@ protected:
 	};
 
 private:
+	// static void PoiseCallback_Post(const PRECISION_API::PrecisionHitData& a_precisionHitData, const RE::HitData& hitData);
 	constexpr HitEventHandler() noexcept = default;
 	HitEventHandler(const HitEventHandler&) = delete;
 	HitEventHandler(HitEventHandler&&) = delete;
