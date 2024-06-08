@@ -111,11 +111,11 @@ public:
 
 	static void TryStagger(RE::Actor* a_target, float a_staggerMult, RE::Actor* a_aggressor)
 	{
+		a_target->SetGraphVariableBool("bPoise_IsStaggered", true);
 		GetSingleton()->appliedStagger = true;
 		GetSingleton()->staggerThread = std::this_thread::get_id();
 		using func_t = decltype(&TryStagger);
 		REL::Relocation<func_t> func{ REL::RelocationID(36700, 37710) };
-		/*bool bKaputt_IsInKillMove = false;*/
 		func(a_target, a_staggerMult, a_aggressor);
 		// if (a_target->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
 		// 	func(a_target, a_staggerMult, a_aggressor);
