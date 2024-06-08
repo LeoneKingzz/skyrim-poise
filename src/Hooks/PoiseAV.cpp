@@ -106,8 +106,11 @@ void PoiseAV::DamageAndCheckPoise(RE::Actor* a_target, RE::Actor* a_aggressor, f
 		auto poiseDamagePercent = a_poiseDamage / avManager->GetActorValueMax(g_avName, a_target);
 		// Stagger duration is relative to the power of the attacking weapon
 		logger::debug(FMT_STRING("Poise Damage Percent {}"), poiseDamagePercent);
-		TryStagger(a_target, poiseDamagePercent, a_aggressor);
-		a_target->SetGraphVariableBool("bPoise_IsStaggered", false);
+		bool bKaputt_IsInKillMove = false;
+		if ((a_target)->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
+			TryStagger(a_target, poiseDamagePercent, a_aggressor);
+			a_target->SetGraphVariableBool("bPoise_IsStaggered", false);
+		}
 	}
 	logger::debug(FMT_STRING("Target {} Poise Damage {} Poise Health {} / {}"), a_target->GetName(), a_poiseDamage, avManager->GetActorValue(g_avName, a_target), avManager->GetActorValueMax(g_avName, a_target));
 }
@@ -134,8 +137,12 @@ void PoiseAV::Update(RE::Actor* a_actor, [[maybe_unused]] float a_delta)
 				}
 				RemoveFromFaction(a_actor, ForceFullBodyStagger);
 			} else {
-				TryStagger(a_actor, 0.5f, nullptr);
-				a_actor->SetGraphVariableBool("bPoise_IsStaggered", false);
+				bool bKaputt_IsInKillMove = false;
+				if ((a_actor)->GetGraphVariableBool("bKaputt_IsInKillMove", bKaputt_IsInKillMove) && !bKaputt_IsInKillMove) {
+					TryStagger(a_actor, 0.5f, nullptr);
+					a_actor->SetGraphVariableBool("bPoise_IsStaggered", false);
+				}
+				
 			}
 		} else {
 			avManager->RestoreActorValue(g_avName, a_actor, avManager->GetActorValueMax(g_avName, a_actor) * settings->Health.RegenRate * a_delta);
