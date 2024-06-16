@@ -1161,8 +1161,12 @@ public:
 
 	static const RE::TESObjectWEAP* UGetAttackWeapon(RE::AIProcess* const aiProcess)
 	{
-		const RE::TESForm* equipped = aiProcess->high->attackData.get()->IsLeftAttack() ? aiProcess->GetEquippedLeftHand() : aiProcess->GetEquippedRightHand();
-		return equipped->As<RE::TESObjectWEAP>();
+		if (aiProcess && aiProcess->high && aiProcess->high->attackData) {
+			const RE::TESForm* equipped = aiProcess->high->attackData.get()->IsLeftAttack() ? aiProcess->GetEquippedLeftHand() : aiProcess->GetEquippedRightHand();
+			return equipped->As<RE::TESObjectWEAP>();
+		}else{
+			return nullptr;
+		}
 	}
 
 	static void resetProjectileOwner(RE::Projectile* a_projectile, RE::Actor* a_actor, RE::hkpCollidable* a_projectile_collidable)
