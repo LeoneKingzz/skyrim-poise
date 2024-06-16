@@ -188,7 +188,7 @@ public:
 		auto weaponAI = a_aggressor->GetActorRuntimeData().currentProcess;
 
 		if (weaponAI && weaponAI->high && weaponAI->high->attackData) {
-			const RE::TESForm* weaponL = weaponAI->high->attackData->IsLeftAttack() ? weaponAI->GetEquippedLeftHand() : weaponAI->GetEquippedRightHand();
+			const RE::TESForm* weaponL = weaponAI->high->attackData.get()->IsLeftAttack() ? weaponAI->GetEquippedLeftHand() : weaponAI->GetEquippedRightHand();
 
 			// if the weapon is underdetermined//
 			if (!weaponL) {
@@ -1161,7 +1161,7 @@ public:
 
 	static const RE::TESObjectWEAP* UGetAttackWeapon(RE::AIProcess* const aiProcess)
 	{
-		const RE::TESForm* equipped = aiProcess->high->attackData->IsLeftAttack() ? aiProcess->GetEquippedLeftHand() : aiProcess->GetEquippedRightHand();
+		const RE::TESForm* equipped = aiProcess->high->attackData.get()->IsLeftAttack() ? aiProcess->GetEquippedLeftHand() : aiProcess->GetEquippedRightHand();
 		return equipped->As<RE::TESObjectWEAP>();
 	}
 
